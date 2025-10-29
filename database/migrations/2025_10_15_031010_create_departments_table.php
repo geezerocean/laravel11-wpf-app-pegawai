@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
+            $table->string('kode_departemen', 10)->unique()->nullable(); // tambahkan unique biar bisa direferensikan
             $table->string('nama_departemen', 100);
+            $table->string('lokasi', 100)->nullable();
+            $table->integer('jumlah_pegawai')->default(0);
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Data Pegawai')
+@section('title', 'Data Gaji Karyawan')
 
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/employee-create.css') }}">
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -23,6 +22,8 @@
             --secondary-dark: #504b38;
             --accent-green: #27ae60;
             --accent-red: #e74c3c;
+            --accent-blue: #3498db;
+            --accent-orange: #e67e22;
             --text-dark: #2d3748;
             --text-light: #718096;
             --white: #ffffff;
@@ -46,7 +47,7 @@
         .header-section {
             background: linear-gradient(135deg, var(--secondary-dark) 0%, #6b6548 100%);
             border-radius: 20px;
-            padding: 2.5rem;
+            padding: 2rem;
             margin-bottom: 2rem;
             color: white;
             box-shadow: 0 10px 30px rgba(80, 75, 56, 0.2);
@@ -57,10 +58,10 @@
         .header-section::before {
             content: '';
             position: absolute;
-            top: -50%;
+            top: -30%;
             right: -10%;
-            width: 300px;
-            height: 300px;
+            width: 200px;
+            height: 200px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
         }
@@ -134,66 +135,63 @@
             font-weight: 500;
         }
         
-        .badge-custom {
+        .employee-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .employee-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, #a59e74 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .employee-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .employee-name {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .employee-id {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .period-badge {
+            background: linear-gradient(135deg, var(--primary-medium) 0%, #e8e2bb 100%);
+            color: var(--secondary-dark);
             padding: 0.5rem 1rem;
             border-radius: 10px;
             font-weight: 500;
-            font-size: 0.85rem;
-        }
-        
-        .badge-department {
-            background: linear-gradient(135deg, var(--primary-light) 0%, #fff9d6 100%);
-            color: var(--secondary-dark);
-            border: 1px solid rgba(184, 178, 138, 0.3);
-        }
-        
-        .badge-position {
-            background: linear-gradient(135deg, var(--primary-medium) 0%, #e8e2bb 100%);
-            color: var(--secondary-dark);
-        }
-        
-        .status-badge {
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        .status-active {
-            background: linear-gradient(135deg, var(--accent-green) 0%, #2ecc71 100%);
-            color: white;
-            border: 2px solid #27ae60;
-        }
-        
-        .status-inactive {
-            background: linear-gradient(135deg, var(--accent-red) 0%, #c0392b 100%);
-            color: white;
-            border: 2px solid #e74c3c;
+        .salary-badge {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .btn-primary-custom {
-            background: linear-gradient(135deg, var(--secondary-dark) 0%, #6b6548 100%);
-            border: none;
-            border-radius: 12px;
-            padding: 0.7rem 1.5rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(80, 75, 56, 0.3);
-        }
-        
-        .btn-primary-custom:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(80, 75, 56, 0.4);
-            background: linear-gradient(135deg, #6b6548 0%, var(--secondary-dark) 100%);
-        }
-        
-        .btn-success-custom {
             background: linear-gradient(135deg, var(--primary-dark) 0%, #a59e74 100%);
             border: none;
             border-radius: 12px;
@@ -201,12 +199,18 @@
             font-weight: 500;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(184, 178, 138, 0.3);
+            color: white;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .btn-success-custom:hover {
+        .btn-primary-custom:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(184, 178, 138, 0.4);
             background: linear-gradient(135deg, #a59e74 0%, var(--primary-dark) 100%);
+            color: white;
         }
         
         .action-btn {
@@ -237,22 +241,17 @@
             box-shadow: 0 0 0 3px rgba(184, 178, 138, 0.2);
         }
         
-        .filter-btn {
-            background: var(--white);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 12px;
-            padding: 0.7rem 1.5rem;
-            transition: all 0.3s ease;
-            color: var(--text-dark);
-            font-weight: 500;
+        .empty-state {
+            padding: 3rem 2rem;
+            text-align: center;
         }
         
-        .filter-btn:hover {
-            background: var(--primary-light);
-            border-color: var(--primary-medium);
+        .empty-state-icon {
+            font-size: 4rem;
+            color: var(--primary-medium);
+            margin-bottom: 1.5rem;
         }
         
-        /* Pagination Styles */
         .pagination-custom {
             margin: 0;
         }
@@ -288,38 +287,6 @@
             border-color: #dee2e6;
         }
         
-        .pagination-custom .pagination-icon {
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .empty-state {
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-        
-        .empty-state-icon {
-            font-size: 5rem;
-            color: var(--primary-medium);
-            margin-bottom: 1.5rem;
-        }
-        
-        .email-cell {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-        
-        .name-cell {
-            font-weight: 600;
-            color: var(--secondary-dark);
-            font-size: 1rem;
-        }
-        
         @media (max-width: 768px) {
             .header-section {
                 padding: 1.5rem;
@@ -347,47 +314,15 @@
         <div class="header-section">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <h1 class="display-6 fw-bold mb-3"><i class="bi bi-people-fill me-3"></i>Manajemen Karyawan</h1>
-                    <p class="lead mb-0">Kelola data karyawan dengan mudah dan efisien</p>
+                    <h1 class="display-6 fw-bold mb-3"><i class="bi bi-currency-dollar me-3"></i>Manajemen Penggajian</h1>
+                    <p class="lead mb-0">Kelola data gaji dan kompensasi karyawan</p>
                 </div>
                 <div class="col-md-6">
                     <div class="row text-center">
-                        <div class="col-4">
+                        <div class="col-12">
                             <div class="stats-card">
-                                <h3 class="fw-bold">{{ $employees->total() ?? '0' }}</h3>
-                                <p class="mb-0 small">Total Karyawan</p>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stats-card">
-                                <h3 class="fw-bold">
-                                    @php
-                                        $activeCount = 0;
-                                        foreach ($employees as $employee) {
-                                            if (strtolower($employee->status) == 'active' || strtolower($employee->status) == 'aktif') {
-                                                $activeCount++;
-                                            }
-                                        }
-                                        echo $activeCount;
-                                    @endphp
-                                </h3>
-                                <p class="mb-0 small">Aktif</p>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="stats-card">
-                                <h3 class="fw-bold">
-                                    @php
-                                        $uniqueDepartments = [];
-                                        foreach ($employees as $employee) {
-                                            if ($employee->department && $employee->department->nama_departemen) {
-                                                $uniqueDepartments[$employee->department->nama_departemen] = true;
-                                            }
-                                        }
-                                        echo count($uniqueDepartments);
-                                    @endphp
-                                </h3>
-                                <p class="mb-0 small">Departemen</p>
+                                <h3 class="fw-bold">{{ $salaries->total() }}</h3>
+                                <p class="mb-0 small">Total Data Gaji</p>
                             </div>
                         </div>
                     </div>
@@ -397,7 +332,7 @@
 
         <!-- Success Message -->
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -409,18 +344,15 @@
             <div class="card-header-custom">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <h5 class="card-title mb-0 fw-bold text-dark"><i class="bi bi-list-ul me-2"></i>Daftar Karyawan</h5>
+                        <h5 class="card-title mb-0 fw-bold text-dark"><i class="bi bi-list-ul me-2"></i>Daftar Penggajian</h5>
                     </div>
                     <div class="col-md-6 text-end">
                         <div class="d-flex justify-content-end gap-3">
                             <div class="flex-grow-1">
-                                <input type="text" class="form-control search-box" placeholder="Cari karyawan...">
+                                <input type="text" class="form-control search-box" placeholder="Cari karyawan atau periode...">
                             </div>
-                            <button class="btn filter-btn">
-                                <i class="bi bi-funnel me-2"></i>Filter
-                            </button>
-                            <a href="{{ route('employees.create') }}" class="btn btn-success-custom text-white">
-                                <i class="bi bi-person-plus me-2"></i>Tambah Karyawan
+                            <a href="{{ route('salaries.create') }}" class="btn btn-primary-custom text-white">
+                                <i class="bi bi-plus-circle me-2"></i>Tambah Data Gaji
                             </a>
                         </div>
                     </div>
@@ -433,75 +365,70 @@
                     <table class="table table-custom">
                         <thead>
                             <tr>
-                                <th class="ps-4">#</th>
-                                <th>Nama Karyawan</th>
-                                <th>Email</th>
-                                <th>Departemen</th>
-                                <th>Jabatan</th>
-                                <th>Status</th>
+                                <th class="ps-4">No</th>
+                                <th>Karyawan</th>
+                                <th>Periode</th>
+                                <th class="text-end pe-4">Total Gaji</th>
                                 <th class="text-center pe-4">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($employees as $employee)
+                            @forelse($salaries as $index => $salary)
                                 <tr>
-                                    <td class="ps-4 fw-bold">{{ ($employees->currentPage() - 1) * $employees->perPage() + $loop->iteration }}</td>
-                                    <td>
-                                        <div class="name-cell">{{ $employee->nama_lengkap }}</div>
+                                    <td class="ps-4">
+                                        <span class="fw-semibold text-muted">
+                                            {{ $salaries->firstItem() + $index }}
+                                        </span>
                                     </td>
                                     <td>
-                                        <div class="email-cell">
-                                            <i class="bi bi-envelope text-primary"></i>
-                                            {{ $employee->email }}
+                                        <div class="employee-info">
+                                            <div class="employee-avatar">
+                                                {{ substr($salary->employee->nama_lengkap ?? 'N/A', 0, 1) }}
+                                            </div>
+                                            <div class="employee-details">
+                                                <span class="employee-name">
+                                                    {{ $salary->employee->nama_lengkap ?? '-' }}
+                                                </span>
+                                                <span class="employee-id">
+                                                    {{ $salary->employee->department->nama_departemen ?? 'No Dept' }}
+                                                </span>
+                                            </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="badge badge-custom badge-department">
-                                            <i class="bi bi-building me-1"></i> 
-                                            {{ $employee->department->nama_departemen ?? 'Tidak Ada' }}
+                                        <span class="period-badge">
+                                            <i class="bi bi-calendar-month"></i>
+                                            {{ $salary->periode }}
                                         </span>
                                     </td>
-                                    <td>
-                                        <span class="badge badge-custom badge-position">
-                                            <i class="bi bi-person-badge me-1"></i> 
-                                            {{ $employee->position->nama_jabatan ?? 'Tidak Ada' }}
+                                    <td class="text-end pe-4">
+                                        <span class="salary-badge">
+                                            <i class="bi bi-wallet2"></i>
+                                            Rp {{ number_format($salary->total_gaji, 0, ',', '.') }}
                                         </span>
-                                    </td>
-                                    <td>
-                                        @if(strtolower($employee->status) == 'active' || strtolower($employee->status) == 'aktif')
-                                            <span class="status-badge status-active">
-                                                <i class="bi bi-check-circle-fill"></i>
-                                                Aktif
-                                            </span>
-                                        @else
-                                            <span class="status-badge status-inactive">
-                                                <i class="bi bi-x-circle-fill"></i>
-                                                Nonaktif
-                                            </span>
-                                        @endif
                                     </td>
                                     <td>
                                         <div class="d-flex justify-content-center gap-2">
-                                            <a href="{{ route('employees.show', $employee->id) }}" 
+                                            <a href="{{ route('salaries.show', $salary->id) }}" 
                                                class="btn btn-info text-white action-btn" 
                                                data-bs-toggle="tooltip" 
-                                               title="Detail Karyawan">
+                                               title="Detail Gaji">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <a href="{{ route('employees.edit', $employee->id) }}" 
-                                               class="btn btn-primary action-btn" 
+                                            <a href="{{ route('salaries.edit', $salary->id) }}" 
+                                               class="btn btn-warning action-btn" 
                                                data-bs-toggle="tooltip" 
-                                               title="Edit Data">
+                                               title="Edit Gaji">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('salaries.destroy', $salary->id) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 
                                                         class="btn btn-danger action-btn"
                                                         data-bs-toggle="tooltip" 
-                                                        title="Hapus Karyawan"
-                                                        onclick="return confirm('Yakin hapus data ini?')">
+                                                        title="Hapus Data Gaji"
+                                                        onclick="return confirm('Yakin ingin menghapus data gaji ini?')">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
@@ -510,13 +437,13 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center py-4">
+                                    <td colspan="5" class="text-center py-4">
                                         <div class="empty-state">
-                                            <i class="bi bi-people empty-state-icon"></i>
-                                            <h5>Belum ada data karyawan</h5>
-                                            <p class="mb-3">Mulai dengan menambahkan karyawan baru</p>
-                                            <a href="{{ route('employees.create') }}" class="btn btn-success-custom text-white">
-                                                <i class="bi bi-person-plus me-2"></i>Tambah Karyawan Pertama
+                                            <i class="bi bi-wallet empty-state-icon"></i>
+                                            <h5>Belum ada data gaji</h5>
+                                            <p class="mb-3">Mulai dengan menambahkan data gaji baru</p>
+                                            <a href="{{ route('salaries.create') }}" class="btn btn-primary-custom text-white">
+                                                <i class="bi bi-plus-circle me-2"></i>Tambah Data Gaji Pertama
                                             </a>
                                         </div>
                                     </td>
@@ -527,23 +454,59 @@
                 </div>
             </div>
 
-            <!-- Card Footer -->
-            @if($employees->count() > 0)
-            <div class="card-footer bg-light py-3">
-                <div class="row align-items-center">
-                    <div class="col-md-6 ms-4">
-                        <p class="mb-0 text-muted">
-                            Menampilkan {{ $employees->firstItem() }} - {{ $employees->lastItem() }} dari {{ $employees->total() }} karyawan
-                        </p>
-                    </div>
-                    <div class="col-md-6 ms-5">
-                        <nav aria-label="Page navigation">
-                            <ul class="pagination pagination-custom justify-content-end mb-0">
-                                {{ $employees->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
+            <!-- Card Footer dengan Pagination -->
+            @if($salaries->count() > 0)
+            <div class="card-footer bg-transparent border-0 py-3 text-center">
+                <p class="pagination-info mb-2">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Menampilkan {{ $salaries->firstItem() }} - {{ $salaries->lastItem() }} dari {{ $salaries->total() }} gaji
+                </p>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-custom justify-content-center mb-0">
+                        <!-- Previous Button -->
+                        <li class="page-item {{ $salaries->onFirstPage() ? 'disabled' : '' }}">
+                            <a class="page-link" href="{{ $salaries->previousPageUrl() }}" aria-label="Previous">
+                                <i class="bi bi-chevron-left"></i>
+                                <span class="d-none d-sm-inline ms-1">Previous</span>
+                            </a>
+                        </li>
+
+                        <!-- Page Numbers -->
+                        @php
+                            $currentPage = $salaries->currentPage();
+                            $lastPage = $salaries->lastPage();
+                            $startPage = max($currentPage - 1, 1);
+                            $endPage = min($currentPage + 1, $lastPage);
+                            
+                            if ($startPage > 1) {
+                                echo '<li class="page-item"><a class="page-link" href="' . $salaries->url(1) . '">1</a></li>';
+                                if ($startPage > 2) {
+                                    echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                }
+                            }
+                            
+                            for ($page = $startPage; $page <= $endPage; $page++) {
+                                $isActive = $page == $currentPage ? 'active' : '';
+                                echo '<li class="page-item ' . $isActive . '"><a class="page-link" href="' . $salaries->url($page) . '">' . $page . '</a></li>';
+                            }
+                            
+                            if ($endPage < $lastPage) {
+                                if ($endPage < $lastPage - 1) {
+                                    echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                }
+                                echo '<li class="page-item"><a class="page-link" href="' . $salaries->url($lastPage) . '">' . $lastPage . '</a></li>';
+                            }
+                        @endphp
+
+                        <!-- Next Button -->
+                        <li class="page-item {{ $salaries->hasMorePages() ? '' : 'disabled' }}">
+                            <a class="page-link" href="{{ $salaries->nextPageUrl() }}" aria-label="Next">
+                                <span class="d-none d-sm-inline me-1">Next</span>
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
             @endif
         </div>

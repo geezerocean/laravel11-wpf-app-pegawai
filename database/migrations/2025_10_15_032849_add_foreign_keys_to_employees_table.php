@@ -12,20 +12,27 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->unsignedBigInteger('department_id')->after('tanggal_masuk');
-            $table->unsignedBigInteger('jabatan_id')->after('department_id');
+            // Tambah kolom kalau belum ada
+            if (!Schema::hasColumn('employees', 'department_id')) {
+                $table->unsignedBigInteger('department_id')->nullable()->after('tanggal_masuk');
+            }
 
-            $table->foreign('department_id')
+            if (!Schema::hasColumn('employees', 'position_id')) {
+                $table->unsignedBigInteger('position_id')->nullable()->after('department_id');
+            }
+
+            // Foreign key baru dengan nama unik (biar gak tabrakan)
+            $table->foreign('department_id', 'fk_employees_department')
                 ->references('id')
                 ->on('departments')
                 ->onDelete('cascade');
 
-            $table->foreign('jabatan_id')
+            $table->foreign('position_id', 'fk_employees_position')
                 ->references('id')
                 ->on('positions')
                 ->onDelete('cascade');
         });
-        }
+    }
 
     /**
      * Reverse the migrations.
@@ -33,9 +40,15 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('employees', function (Blueprint $table) {
-            $table->dropForeign(['department_id']);
-            $table->dropForeign(['jabatan_id']);
-            $table->dropColumn(['department_id', 'jabatan_id']);
+            if (Schema::hasColumn('employees', 'department_id')) {
+                $table->dropForeign('fk_employees_department');
+                $table->dropColumn('department_id');
+            }
+
+            if (Schema::hasColumn('employees', 'position_id')) {
+                $table->dropForeign('fk_employees_position');
+                $table->dropColumn('position_id');
+            }
         });
     }
 };

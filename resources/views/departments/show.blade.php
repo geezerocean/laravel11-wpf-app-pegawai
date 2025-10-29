@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Karyawan - ' . $employee->nama_lengkap)
+@section('title', 'Detail Departemen - ' . ($department->nama_departemen ?? 'Unknown'))
 
 @section('content')
 <!DOCTYPE html>
@@ -22,6 +22,8 @@
             --secondary-dark: #504b38;
             --accent-green: #27ae60;
             --accent-red: #e74c3c;
+            --accent-blue: #3498db;
+            --accent-orange: #e67e22;
             --text-dark: #2d3748;
             --text-light: #718096;
             --white: #ffffff;
@@ -138,26 +140,24 @@
             margin-bottom: 0;
         }
         
-        .status-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+        .empty-value {
+            color: var(--text-light);
+            font-style: italic;
         }
         
-        .status-active {
-            background: linear-gradient(135deg, var(--accent-green) 0%, #2ecc71 100%);
-            color: white;
+        .description-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--primary-light) 0%, #fff9d6 100%);
+            border: 1px solid rgba(184, 178, 138, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
         }
         
-        .status-inactive {
-            background: linear-gradient(135deg, var(--accent-red) 0%, #c0392b 100%);
-            color: white;
+        .description-content {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-dark);
         }
         
         .btn-custom-secondary {
@@ -182,12 +182,6 @@
             color: white;
         }
         
-        .action-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        
         .btn-edit {
             background: linear-gradient(135deg, var(--primary-dark) 0%, #a59e74 100%);
             border: none;
@@ -210,9 +204,22 @@
             color: white;
         }
         
-        .empty-value {
-            color: var(--text-light);
-            font-style: italic;
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .employee-count-badge {
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #2980b9 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         @media (max-width: 768px) {
@@ -242,12 +249,12 @@
             <div class="row align-items-center">
                 <div class="col-md-8">
                     <h1 class="display-6 fw-bold mb-2">
-                        <i class="bi bi-person-badge me-3"></i>Detail Karyawan
+                        <i class="bi bi-building me-3"></i>Detail Departemen
                     </h1>
-                    <p class="lead mb-0">Informasi lengkap data karyawan</p>
+                    <p class="lead mb-0">Informasi lengkap data departemen</p>
                 </div>
                 <div class="col-md-4 text-end">
-                    <a href="{{ route('employees.index') }}" class="btn btn-custom-secondary">
+                    <a href="{{ route('departments.index') }}" class="btn btn-custom-secondary">
                         <i class="bi bi-arrow-left me-2"></i>Kembali ke Daftar
                     </a>
                 </div>
@@ -261,13 +268,13 @@
                 <div class="row align-items-center">
                     <div class="col-md-8">
                         <h5 class="card-title mb-0 fw-bold text-dark">
-                            <i class="bi bi-person-circle me-2"></i>{{ $employee->nama_lengkap }}
+                            <i class="bi bi-building me-2"></i>{{ $department->nama_departemen ?? 'Departemen' }}
                         </h5>
                     </div>
                     <div class="col-md-4 text-end">
-                        <span class="status-badge {{ strtolower($employee->status) == 'active' || strtolower($employee->status) == 'aktif' ? 'status-active' : 'status-inactive' }}">
-                            <i class="bi {{ strtolower($employee->status) == 'active' || strtolower($employee->status) == 'aktif' ? 'bi-check-circle-fill' : 'bi-x-circle-fill' }}"></i>
-                            {{ ucfirst($employee->status) }}
+                        <span class="employee-count-badge">
+                            <i class="bi bi-people-fill"></i>
+                            {{ $department->employees_count ?? 0 }} Karyawan
                         </span>
                     </div>
                 </div>
@@ -276,105 +283,107 @@
             <!-- Information Section -->
             <div class="info-section">
                 <div class="info-grid">
-                    <!-- Personal Information -->
+                    <!-- Basic Information -->
                     <div class="info-item">
                         <div class="info-icon">
-                            <i class="bi bi-person"></i>
+                            <i class="bi bi-hash"></i>
                         </div>
                         <div class="info-content">
-                            <div class="info-label">Nama Lengkap</div>
-                            <div class="info-value">{{ $employee->nama_lengkap }}</div>
-                        </div>
-                    </div>
-
-                    <div class="info-item">
-                        <div class="info-icon">
-                            <i class="bi bi-envelope"></i>
-                        </div>
-                        <div class="info-content">
-                            <div class="info-label">Email</div>
-                            <div class="info-value">{{ $employee->email }}</div>
-                        </div>
-                    </div>
-
-                    <div class="info-item">
-                        <div class="info-icon">
-                            <i class="bi bi-telephone"></i>
-                        </div>
-                        <div class="info-content">
-                            <div class="info-label">No Telepon</div>
-                            <div class="info-value {{ empty($employee->no_telepon) ? 'empty-value' : '' }}">
-                                {{ $employee->no_telepon ?? '- Tidak Tersedia -' }}
+                            <div class="info-label">Kode Departemen</div>
+                            <div class="info-value {{ empty($department->kode_departemen) ? 'empty-value' : '' }}">
+                                {{ $department->kode_departemen ?? '- Tidak Tersedia -' }}
                             </div>
                         </div>
                     </div>
 
-                    <div class="info-item">
-                        <div class="info-icon">
-                            <i class="bi bi-calendar-event"></i>
-                        </div>
-                        <div class="info-content">
-                            <div class="info-label">Tanggal Lahir</div>
-                            <div class="info-value">{{ $employee->tanggal_lahir }}</div>
-                        </div>
-                    </div>
-
-                    <!-- Work Information -->
                     <div class="info-item">
                         <div class="info-icon">
                             <i class="bi bi-building"></i>
                         </div>
                         <div class="info-content">
-                            <div class="info-label">Departemen</div>
-                            <div class="info-value {{ empty($employee->department->nama_departemen) ? 'empty-value' : '' }}">
-                                {{ $employee->department->nama_departemen ?? '- Tidak Ada -' }}
-                            </div>
+                            <div class="info-label">Nama Departemen</div>
+                            <div class="info-value">{{ $department->nama_departemen ?? '-' }}</div>
                         </div>
                     </div>
 
                     <div class="info-item">
-                        <div class="info-icon">
-                            <i class="bi bi-person-badge"></i>
-                        </div>
-                        <div class="info-content">
-                            <div class="info-label">Jabatan</div>
-                            <div class="info-value {{ empty($employee->position->nama_jabatan) ? 'empty-value' : '' }}">
-                                {{ $employee->position->nama_jabatan ?? '- Tidak Ada -' }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="info-item">
-                        <div class="info-icon">
-                            <i class="bi bi-calendar-check"></i>
-                        </div>
-                        <div class="info-content">
-                            <div class="info-label">Tanggal Masuk</div>
-                            <div class="info-value">{{ $employee->tanggal_masuk }}</div>
-                        </div>
-                    </div>
-
-                    <!-- Address Information -->
-                    <div class="info-item" style="grid-column: 1 / -1;">
                         <div class="info-icon">
                             <i class="bi bi-geo-alt"></i>
                         </div>
                         <div class="info-content">
-                            <div class="info-label">Alamat Lengkap</div>
-                            <div class="info-value">{{ $employee->alamat }}</div>
+                            <div class="info-label">Lokasi</div>
+                            <div class="info-value {{ empty($department->lokasi) ? 'empty-value' : '' }}">
+                                {{ $department->lokasi ?? '- Tidak Tersedia -' }}
+                            </div>
                         </div>
                     </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">Jumlah Karyawan</div>
+                            <div class="info-value">
+                                <span class="fw-bold text-primary">{{ $department->employees_count ?? 0 }}</span> 
+                                <span class="text-muted">karyawan</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timestamp Information -->
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="bi bi-calendar-plus"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">Dibuat Pada</div>
+                            <div class="info-value">
+                                {{ $department->created_at ? $department->created_at->format('d M Y H:i') : '-' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="bi bi-clock-history"></i>
+                        </div>
+                        <div class="info-content">
+                            <div class="info-label">Diperbarui Pada</div>
+                            <div class="info-value">
+                                {{ $department->updated_at ? $department->updated_at->format('d M Y H:i') : '-' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description Card -->
+                    @if(!empty($department->deskripsi))
+                    <div class="description-card">
+                        <div class="info-item" style="border-left: none; background: transparent; padding: 0;">
+                            <div class="info-icon" style="background: var(--secondary-dark);">
+                                <i class="bi bi-card-text"></i>
+                            </div>
+                            <div class="info-content">
+                                <div class="info-label">Deskripsi Departemen</div>
+                                <div class="description-content">
+                                    {{ $department->deskripsi }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="card-footer bg-light py-3 d-flex justify-content-center gap-2">
-                <a href="{{ route('employees.index') }}" class="btn btn-custom-secondary">
+                <a href="{{ route('departments.index') }}" class="btn btn-custom-secondary">
                     <i class="bi bi-arrow-left me-2"></i>Kembali ke Daftar
                 </a>
-                <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-edit">
+                <a href="{{ route('departments.edit', $department->id) }}" class="btn btn-edit">
                     <i class="bi bi-pencil me-2"></i>Edit Data Karyawan
                 </a>
+            </div>
             </div>
         </div>
     </div>
